@@ -1,0 +1,199 @@
+<mvc:View
+    controllerName="normalizePMRatingFormAPI40.normalisationapi40.controller.normalizePMRating"
+     xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="mainPage" busy="true" title="2021년 평가 리뷰 및 조정" showHeader="true" class="sapUiSizeCompact headerClass">
+                    <content>
+						<BusyDialog text="Loading Data" visible="false" id="BusyDialog"/>
+						<HBox width="100%">
+							<VBox width="15%" class="meanClass topMargin">
+								<Text class="darkorange bigfonts" text="{managerModel>/totalMean}"/>
+								<Label design="Bold" class="white sapUiTinyMarginBegin labelFonts" text="전체 평균"/>
+								<Text class="darkorange bigfonts" text="{managerModel>/totalSD}"/>
+								<Label design="Bold" class="sapUiTinyMarginBegin white labelFonts" text="전체 표준편차"/>
+							</VBox>
+							<VBox width="85%">
+								<Table id="managerTable" class="sapUiSmallMargin" selectionChange="selectNormalizeTable" width="97%" mode="SingleSelectLeft"
+									items="{managerModel>/managers}">
+									<headerToolbar>
+										<OverflowToolbar>
+											<Title class="white" text="팀 요약 정보" level="H2"/>
+											<ToolbarSpacer/>
+											<Button type="Emphasized" text="전체 조회" press="showAll"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns>
+										<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+											<header>
+												<Text class="bold" text="팀명"/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+											<header>
+												<Text class="bold" text="1차평가자"/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+											<header>
+												<Text class="bold" text="2차평가자"/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" hAlign="Center">
+											<header>
+												<Text class="bold" text="팀 평균 "/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" hAlign="Center">
+											<header>
+												<Text class="bold" text="평균 차이 "/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" hAlign="Center">
+											<header>
+												<Text class="bold" text="팀 표준편차 "/>
+											</header>
+										</Column>
+										<Column minScreenWidth="Tablet" hAlign="Center">
+											<header>
+												<Text class="bold" text="표준편차 차이 "/>
+											</header>
+										</Column>
+									</columns>
+									<ColumnListItem>
+										<Text text="{managerModel>team}"/>
+										<Text text="{managerModel>firstManager}"/>
+										<Text text="{managerModel>secondManager}"/>
+										<Text text="{managerModel>teamMean}"/>
+										<Text text="{managerModel>meanDifference}"/>
+										<Text text="{managerModel>teamSD}"/>
+										<Text text="{managerModel>sdDifference}"/>
+									</ColumnListItem>
+								</Table>
+							</VBox>
+						</HBox>
+						<Table id="employeeTable" class="sapUiSmallMargin" mode="SingleSelectLeft" selectionChange="selectEmployeeTable" width="97%"
+							items="{employeesModel>/}" busyIndicatorDelay="0">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title class="white" text="2021년 평가 리뷰 상세 리스트" level="H2"/>
+									<ToolbarSpacer/>
+									<Button type="Emphasized" text="점수조정" press="calculateAdjust"/>
+									<Button type="Emphasized" text="초기화" press="calculateRestore"/>
+									<Button type="Emphasized" text="문서조회" press="openPMForm"/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="팀 명 "/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="직무 명"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="사번"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="성"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="이름"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="목표 점수"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<Text class="bold" text="목표 가중치"/>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<VBox>
+											<Text class="bold" text="공통역량"/>
+											<Text class="bold" text="점수"/>
+										</VBox>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<VBox>
+											<Label class="bold" text="공통역량"/>
+											<Label class="bold" text="가중치"/>
+										</VBox>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<VBox>
+											<Label class="bold" text="직무역량"/>
+											<Label class="bold" text="점수"/>
+										</VBox>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+									<header>
+										<VBox>
+											<Label class="bold" text="직무역량"/>
+											<Label class="bold" text="가중치"/>
+										</VBox>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" hAlign="Center">
+									<header>
+										<VBox>
+											<Label class="bold" text="종합평가"/>
+											<Label class="bold" text="점수"/>
+										</VBox>
+									</header>
+								</Column>
+								<Column minScreenWidth="Tablet" hAlign="Center">
+									<header>
+										<VBox>
+											<Label class="bold" text="조정평가"/>
+											<Label class="bold" text="점수"/>
+										</VBox>
+									</header>
+								</Column>
+							</columns>
+							<ColumnListItem>
+								<Text text="{employeesModel>department}"/>
+								<Text text="{employeesModel>jobCode}"/>
+								<Text text="{employeesModel>userId}"/>
+								<Text text="{employeesModel>lastName}"/>
+								<Text text="{employeesModel>firstName}"/>
+								<!--<Text text=""/>
+								<Text text=""/>
+								<Text text="{employeesModel>competencyRatingNav/results/0/rating}"/>
+								<Text text=""/>-->
+								<Text text="{employeesModel>summaryListing/2/valueInSummary}"/>
+								<Text text="{employeesModel>summaryListing/2/sectionWeight}"/>
+								<Text text="{employeesModel>summaryListing/1/valueInSummary}"/>
+								<Text text="{employeesModel>summaryListing/1/sectionWeight}"/>
+								<Text text="{employeesModel>summaryListing/0/valueInSummary}"/>
+								<Text text="{employeesModel>summaryListing/0/sectionWeight}"/>
+								<Text text="{employeesModel>CalRatResult}"/>
+								<Text text="{employeesModel>adjustedRating}"/>
+							</ColumnListItem>
+						</Table>
+					</content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>

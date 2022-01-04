@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: normalizePMRatingFormAPI40-normalisationapi40
+description: Normalisation
+version: 0.0.1
+modules:
+- name: normalizePMRatingFormAPI40-normalisat-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: normalizePMRatingFormAPI40-normalisation-dest-srv
+    parameters:
+      content-target: true
+  - name: normalizePMRatingFormAPI40-normalisa-repo-host
+    parameters:
+      service-key:
+        name: normalizePMRatingFormAPI40-normalisa-repo-host-key
+  - name: normalizePMRatingFormAPI40-normalisationapi40-uaa
+    parameters:
+      service-key:
+        name: normalizePMRatingFormAPI40-normalisationapi40-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: normalizePMRatingFormAPI40-normalisation_repo_host
+          ServiceInstanceName: normalizePMRatingFormAPI40-normalisation-html5-srv
+          ServiceKeyName: normalizePMRatingFormAPI40-normalisa-repo-host-key
+          sap.cloud.service: normalizePMRatingFormAPI40-normalisationapi40
+        - Authentication: OAuth2UserTokenExchange
+          Name: normalizePMRatingFormAPI40-normalisationapi40_uaa
+          ServiceInstanceName: normalizePMRatingFormAPI40-normalisation-xsuaa-srv
+          ServiceKeyName: normalizePMRatingFormAPI40-normalisationapi40-uaa-key
+          sap.cloud.service: normalizePMRatingFormAPI40-normalisationapi40
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: normalizePMRatingFormAPI40-normalisati-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: normalizePMRatingFormAPI40-normalisa-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - normalizePMRatingFormAPI40normalisationapi40.zip
+      name: normalizePMRatingFormAPI40normalisationapi40
+      target-path: resources/
+- name: normalizePMRatingFormAPI40normalisationapi40
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: normalizePMRatingFormAPI40-normalisation-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: normalizePMRatingFormAPI40-normalisation-dest-srv
+    service-plan: lite
+- name: normalizePMRatingFormAPI40-normalisationapi40-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: normalizePMRatingFormAPI40-normalisation-xsuaa-srv
+    service-plan: application
+- name: normalizePMRatingFormAPI40-normalisa-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: normalizePMRatingFormAPI40-normalisation-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

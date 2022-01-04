@@ -1,0 +1,54 @@
+/* Enter your custom styles here */
+
+.headerClass {
+    background-image: url('../images/Background_DarkTheme_1.png');
+}
+
+.shellBar .sapMMenuBtn {
+    width: 12rem !important;
+}
+
+.white {
+    color: #fff;
+}
+
+.bold {
+    font-weight: bold !important;
+}
+
+.simpleForm .sapMLabel {
+    color: #fff !important;
+}
+
+.topMargin {
+    margin-top: 1.7rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.meanClass{
+	border:1px solid white;
+	border-radius: 1rem;
+	text-align: center;
+}
+
+.meanLabels{
+	margin-top: 4rem;
+}
+
+.totalMean{
+	margin-left:1rem;
+}
+
+.bigfonts{
+	font-size: 4rem !important;
+}
+
+.darkorange{
+	color:#FDAC48;
+}
+
+.labelFonts{
+	font-size: 16px;
+}
+
